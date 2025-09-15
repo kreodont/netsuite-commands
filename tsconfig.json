@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "AMD",
+    "lib": ["ES2021", "DOM"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "rootDir": ".",
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "pretty": true,
+    "newLine": "lf",
+    "paths": {
+      "N": ["node_modules/@hitc/netsuite-types/N"],
+      "N/*": ["node_modules/@hitc/netsuite-types/N/*"],
+      "sweetalert2": ["netsuite-libs/sweetalert2"],
+      "dayjs": ["netsuite-libs/dayjs"]
+    }
+  },
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/src/**",
+    "dist"
+  ]
+}
