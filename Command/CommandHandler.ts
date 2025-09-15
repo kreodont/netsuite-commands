@@ -21,6 +21,7 @@ import {CommandCommitCurrentLine} from "./CommandCommitCurrentLine";
 import {CommandContext} from "./CommandContext";
 import {CommandAddLineDynamicMode} from "./CommandAddLineDynamicMode";
 import {CommandSetTextOnLoadedRecord} from "./CommandSetTextOnLoadedRecord";
+import {CommandTransformRecord} from "./CommandTransformRecord";
 
 export interface CommandResult {
     shortDescribe: string;
@@ -39,11 +40,11 @@ export function CommandResultsToString(results: CommandResult[]): string {
 function substituteTemplatesInValuesDict(values: {[key: string]: FieldValue}, replacements: {[key: string]: string}): {[key: string]: FieldValue} {
     /*
     * This function substitutes templates in values with values from context.output
-    * If there "field_name": "<44395>" in the field values, and there is context.output["44395"] = "some value"
+    * If there "field_name": "<44395>" or "<coterm_history_8904710>" in the field values, and there is context.output["44395"] or context.output["coterm_history_8904710"] = "some value"
      */
     const result: {[key: string]: FieldValue} = {};
     for (const [key, value] of Object.entries(values)) {
-        if (/^<\d+>$/.test(String(value))) {
+        if (/^<[a-zA-Z0-9_]+>$/.test(String(value))) {
             const templateName = String(value).slice(1, -1);
             if (replacements[templateName]) {
                 result[key] = replacements[templateName];
@@ -60,9 +61,9 @@ function substituteTemplatesInValuesDict(values: {[key: string]: FieldValue}, re
 function substituteTemplatesInString(s: string, context: CommandContext): string {
     /*
     * This function substitutes templates in string with values from context.output
-    * If there "<44395>" in the string, and there is context.output["44395"] = "some value"
+    * If there "<44395>" or "<coterm_history_8904710>" in the string, and there is context.output["44395"] or context.output["coterm_history_8904710"] = "some value"
      */
-    if (/^<\d+>$/.test(String(s))) {
+    if (/^<[a-zA-Z0-9_]+>$/.test(String(s))) {
         const t = s.slice(1, -1);
         if (context.output && context.output[t]) {
             return context.output[t];
@@ -308,6 +309,9 @@ export class CommandHandler {
         }
         else if (obj.type === `CommandSetTextOnLoadedRecord`) {
             return CommandSetTextOnLoadedRecord.fromString(s);
+        }
+        else if (obj.type === `CommandTransformRecord`) {
+            return CommandTransformRecord.fromString(s);
         }
     }
 

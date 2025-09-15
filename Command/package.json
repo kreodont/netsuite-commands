@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "node ../run-with-folder.js \"node build.js __FOLDER_NAME__\"",
+    "lint": "eslint .. --ext .ts",
+    "test": "jest -c ../jest.config.js",
+    "test:coverage": "jest -c ../jest.config.js --coverage",
+    "deploy": "npm run build && npm run lint && npm test && node ../run-with-folder.js \"node generate-script-xml.js __FOLDER_NAME__\" && suitecloud account:setup && suitecloud project:deploy",
+    "upload_files": "node ../run-with-folder.js \"node upload-files.js __FOLDER_NAME__\""
+  }
+}

@@ -1,11 +1,22 @@
 {
-  "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
-    "build": "node ../run-with-folder.js \"node build.js __FOLDER_NAME__\"",
-    "lint": "eslint . --ext .ts",
-    "test": "jest -c ../jest.config.js",
-    "test:coverage": "jest -c ../jest.config.js --coverage",
-    "deploy": "npm run build && npm run lint && npm test && node ../run-with-folder.js \"node generate-script-xml.js __FOLDER_NAME__\" && suitecloud account:setup && suitecloud project:deploy",
-    "upload_files": "node ../run-with-folder.js \"node upload-files.js __FOLDER_NAME__\""
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@hitc/netsuite-types": "2025.2.1",
+    "@types/jest": "29.5.14",
+    "@typescript-eslint/eslint-plugin": "8.43.0",
+    "@typescript-eslint/parser": "8.43.0",
+    "eslint": "8.57.1",
+    "jest": "29.7.0",
+    "ts-jest": "29.4.1",
+    "typescript": "5.8.3"
+  },
+  "dependencies": {
+    "dayjs": "1.11.18",
+    "sweetalert2": "11.23.0"
   }
 }
