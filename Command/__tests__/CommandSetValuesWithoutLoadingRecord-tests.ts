@@ -1,5 +1,5 @@
 import {CommandSetFieldsValuesWithoutLoadingRecord} from "../CommandSetValuesWithoutLoadingRecord";
-import {Type} from "./TypesForTests";
+import {Type} from "../TypesForTests";
 
 
 describe("CommandSetFieldsValuesWithoutLoadingRecord specific tests", () => {

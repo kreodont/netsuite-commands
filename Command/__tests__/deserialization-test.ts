@@ -1,6 +1,6 @@
 import {CommandHandler} from "../CommandHandler";
 import {CommandSetFieldsValuesWithoutLoadingRecord} from "../CommandSetValuesWithoutLoadingRecord";
-import {Type} from "./TypesForTests";
+import {Type} from "../TypesForTests";
 
 
 /*

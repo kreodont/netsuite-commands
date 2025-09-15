@@ -76,7 +76,7 @@ function writeCommandResultToCache(cacheId: string, commandIndex: number, totalC
             value: JSON.stringify(history),
             ttl: 7200 // 2 hours TTL
         });
-    } catch (error) {
+    } catch (_) {
         // Don't let cache errors break command execution
     }
 }

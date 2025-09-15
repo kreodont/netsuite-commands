@@ -10,7 +10,7 @@
 
 
 import {CommandHandlerForServerScripts} from "./CommandHandlerForServerScripts";
-import {createDebugLogger} from "../netsuite-libs/Logger";
+import {createDebugLogger} from "./Logger";
 import {task} from "N";
 
 export function post(context: Record<`commands` | `onError` | `useMapReduce` | `customJobId` | `cacheId`, string>): string {
@@ -21,7 +21,7 @@ export function post(context: Record<`commands` | `onError` | `useMapReduce` | `
     If any of the commands fails, the rest of the commands are not run by default.
     This can be changed by setting the "onError" parameter to "continue".
      */
-    const log = createDebugLogger({header: `POST`});
+    const log = createDebugLogger({header: `POST`}, '');
     if (!context || !context.commands) {
         log(`Parameters must include "commands". Current context: ${JSON.stringify(context)}`);
         return JSON.stringify({success: false, message: `Parameters must include "commands"`});

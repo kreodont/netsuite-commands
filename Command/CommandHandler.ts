@@ -1,7 +1,6 @@
- import {Command} from "./Command";
+import {Command} from "./Command";
 import {CommandSetFieldsValuesWithoutLoadingRecord} from "./CommandSetValuesWithoutLoadingRecord";
 import {task} from "N";
-import {chunks} from "../netsuite-libs/Helpers";
 import { CommandSaveRecord } from "./CommandSaveRecord";
 import { CommandCreateRecord } from "./CommandCreateRecord";
 import { CommandLoadRecord } from "./CommandLoadRecord";
@@ -22,6 +21,8 @@ import {CommandContext} from "./CommandContext";
 import {CommandAddLineDynamicMode} from "./CommandAddLineDynamicMode";
 import {CommandSetTextOnLoadedRecord} from "./CommandSetTextOnLoadedRecord";
 import {CommandTransformRecord} from "./CommandTransformRecord";
+import {chunks} from "./CommonLib";
+
 
 export interface CommandResult {
     shortDescribe: string;
@@ -56,7 +57,6 @@ function substituteTemplatesInValuesDict(values: {[key: string]: FieldValue}, re
     }
     return result;
 }
-
 
 function substituteTemplatesInString(s: string, context: CommandContext): string {
     /*

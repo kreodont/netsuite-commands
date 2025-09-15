@@ -8,11 +8,11 @@
  */
 
 import { EntryPoints } from "N/types";
-import {createDebugLogger} from "../netsuite-libs/Logger";
-import {getScriptParameter, generateRandomString} from "../netsuite-libs/Helpers";
+import {createDebugLogger} from "./Logger";
+import {getScriptParameter, generateRandomString} from "./CommonLib";
 import {CommandHandlerForServerScripts} from "./CommandHandlerForServerScripts";
 import { runtime, cache } from "N";
-import {writeFile} from "../netsuite-libs/Files";
+import {writeFile} from "./FileFunctions";
 
 interface ToMapReduce {
     handlerStringified: string;
@@ -106,7 +106,7 @@ function checkCancelFlag(jobId: string): boolean {
 }
 
 export function getInputData(): ToMapReduce[] {
-    const log = createDebugLogger({header: `getInputData`});
+    const log = createDebugLogger({header: `getInputData`}, '');
     
     // Check for custom job ID parameter first
     const customJobId = getScriptParameter('custscript_custom_job_id');
@@ -208,7 +208,7 @@ export function map(context: EntryPoints.MapReduce.mapContext): void {
     const startTime = new Date();
     const toMapReduce = JSON.parse(context.value) as ToMapReduce;
     const handler = CommandHandlerForServerScripts.fromString(toMapReduce.handlerStringified);
-    const log = createDebugLogger({header: `map ${toMapReduce.currentNumber + 1}/${toMapReduce.totalNumberOfCommands}`});
+    const log = createDebugLogger({header: `map ${toMapReduce.currentNumber + 1}/${toMapReduce.totalNumberOfCommands}`}, '');
     
     // Use the same consistent job ID (check for custom job ID)
     const customJobId = getScriptParameter('custscript_custom_job_id');
@@ -294,7 +294,7 @@ export function map(context: EntryPoints.MapReduce.mapContext): void {
 }
 
 export function summarize(context: EntryPoints.MapReduce.summarizeContext): void {
-    const log = createDebugLogger({header: `summarize`});
+    const log = createDebugLogger({header: `summarize`}, '');
     
     // Use the same consistent job ID (check for custom job ID)
     const customJobId = getScriptParameter('custscript_custom_job_id');
@@ -302,7 +302,6 @@ export function summarize(context: EntryPoints.MapReduce.summarizeContext): void
     
     updateJobStatus(jobId, 'SUMMARIZE', 'Processing results', 0, 0);
     
-    let outputString = ``;
     let successCount = 0;
     let failCount = 0;
     let totalProcessed = 0;
@@ -316,11 +315,9 @@ export function summarize(context: EntryPoints.MapReduce.summarizeContext): void
             
             if (fromMapReduce.isSuccessful) {
                 successCount++;
-                outputString += `Group ${fromMapReduce.currentNumber + 1}/${fromMapReduce.totalNumberOfCommands} finished successfully in ${fromMapReduce.endTime.getTime() - fromMapReduce.startTime.getTime()} ms<br>`;
             }
             else {
                 failCount++;
-                outputString += `Group ${fromMapReduce.currentNumber + 1}/${fromMapReduce.totalNumberOfCommands} failed<br>Result: ${fromMapReduce.result}<br>Commands: ${fromMapReduce.handlerStringified}<br>`;
             }
             return true;
         });
@@ -351,13 +348,4 @@ export function summarize(context: EntryPoints.MapReduce.summarizeContext): void
             JSON.stringify(e)
         );
     }
-    
-    // email.send({  // don't need to send email, because we can see the results on the Monitoring page
-    //     author: 26075,
-    //     recipients: [runtime.getCurrentUser().id],
-    //     subject: `MapReduce commands completed`,
-    //     body: `${outputString}`,
-    //     attachments: [],
-    // });
-    // log(`Email sent`);
 }
